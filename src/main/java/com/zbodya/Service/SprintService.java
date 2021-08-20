@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.zbodya.Entities.Sprint;
 import com.zbodya.Entities.Userstory;
+import com.zbodya.Entities.DTO.SprintDTO;
 import com.zbodya.Exceptions.TransactionException;
 import com.zbodya.Repositories.SprintRepository;
 import com.zbodya.Repositories.UserstoryRepository;
@@ -27,6 +28,9 @@ public class SprintService
 	
 	@Autowired
 	private UserstoryRepository userRepo;
+	
+	@Autowired 
+	private DTOMapper mapper;
 
 	@Transactional(rollbackOn = TransactionException.class)
 	public void saveSprint(String name, LocalDate startDate, LocalDate endDate, String status) throws TransactionException 
@@ -61,6 +65,19 @@ public class SprintService
 		sprint.addUserstory(us3);
 		repo.save(sprint);
 
+	}
+	
+	public SprintDTO updateSprintStatusById(Long id, String status) 
+	{
+		Sprint s = repo.findById(id).get();
+		s.setStatus(status);
+		repo.save(s);
+		return mapper.convertSprintToSprintDTO(s);
+	}
+	
+	public List<SprintDTO> getSprintsBetweenDate(LocalDate from, LocalDate to)
+	{
+		return repo.findAllByDateBetween(from, to).stream().map(s->mapper.convertSprintToSprintDTO(s)).toList();
 	}
 
 	

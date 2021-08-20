@@ -104,10 +104,12 @@ public class Userstory
 		this.sprints = new ArrayList<Sprint>();
 	}
 	
-
-	
 	public Userstory() {}
 	
-	
+	public void addFile(File file) 
+	{
+		this.files.add(file);
+		file.userstories.add(this);
+	}
 
 }

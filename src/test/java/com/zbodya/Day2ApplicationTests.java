@@ -49,7 +49,7 @@ class Day2ApplicationTests
 	@Test
 	void testFindUserstoriesBySprintID() 
 	{
-		assertThat(userstoryServ.getUserstoriesBySpringID(1L).size()).isEqualTo(2);
+		assertThat(userstoryServ.getUserstoriesBySprintID(1L).size()).isEqualTo(2);
 	}
 	
 	@Test

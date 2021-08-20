@@ -61,16 +61,16 @@ public class Sprint
 		return startdate;
 	}
 
-	public void setStartdate(LocalDate startdate) {
-		this.startdate = startdate;
+	public void setStartdate(LocalDate stardate) {
+		this.startdate = stardate;
 	}
 
-	public LocalDate getEndtdate() {
+	public LocalDate getEnddate() {
 		return enddate;
 	}
 
-	public void setEndtdate(LocalDate endtdate) {
-		this.enddate = endtdate;
+	public void setEnddate(LocalDate enddate) {
+		this.enddate = enddate;
 	}
 
 	public String getDescription() {

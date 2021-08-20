@@ -1,6 +1,7 @@
 package com.zbodya;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -10,22 +11,31 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import com.zbodya.Entities.Sprint;
 import com.zbodya.Entities.Userstory;
+import com.zbodya.Entities.DTO.SprintDTO;
 import com.zbodya.Exceptions.TransactionException;
 import com.zbodya.Repositories.SprintRepository;
 import com.zbodya.Repositories.UserstoryRepository;
+import com.zbodya.Service.DTOMapper;
 import com.zbodya.Service.SprintService;
-import com.zbodya.Service.UserstoriesCreator;
 import com.zbodya.Service.UserstoryService;
 
 @SpringBootApplication
 public class Day2Application {
+	
+	
+	@Bean
+	public RestTemplate restTemplate(RestTemplateBuilder builder) 
+	{
+	   return builder.build();
+	}
 	
 	@Autowired
 	SprintService sprintServ;
@@ -39,6 +49,11 @@ public class Day2Application {
 	@Autowired
 	SprintRepository sprintRepo;
 	
+	@Autowired
+	RestTemplate rest;
+	
+	@Autowired 
+	DTOMapper mapper;
 	
 	Logger LOG =    LogManager.getLogger(Day2Application.class);
 
@@ -72,10 +87,12 @@ public class Day2Application {
 		
 			sprintServ.createSprintWithSomeUserstories();
 			
-		
+//			ResponseEntity<SprintDTO[]> sprints =rest.getForEntity("http://localhost:8080/sprints/getAll?tasks=true",SprintDTO[].class);
+//			
+//			System.out.println("Body: " + sprints.getBody());
 			
-			
-			
+			sprintRepo.findAll().stream().map(s -> mapper.convertSprintToSprintDTO(s)).toList().forEach(s-> System.out.println(s));
+
 			
 			
 			
