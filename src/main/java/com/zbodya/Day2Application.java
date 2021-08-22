@@ -93,20 +93,9 @@ public class Day2Application {
 			sprintRepo.save(sprint.get());
 			
 		
-			sprintServ.createSprintWithSomeUserstories();
+		// Create sprints with userstories	
 			
-//			ResponseEntity<SprintDTO[]> sprints =rest.getForEntity("http://localhost:8080/sprints/getAll?tasks=true",SprintDTO[].class);
-//			
-//			System.out.println("Body: " + sprints.getBody());
-			
-//			sprintRepo.findAll().stream().map(s -> mapper.convertSprintToSprintDTO(s)).toList().forEach(s-> System.out.println(s));
-			
-			
-//			exchange.getAllExchangeRatesFromYesterday();
-//			exchange.getExchangeRatesOfUSDollarForLast10Days();
-			
-			
-			
+			sprintServ.createSprintWithSomeUserstories();			
 	}
 
 }
