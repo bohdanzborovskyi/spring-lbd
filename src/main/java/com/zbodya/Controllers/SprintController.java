@@ -49,7 +49,7 @@ public class SprintController
 	
 	@GetMapping("/getSprinsBetweenDates")
 	public ResponseEntity<List<SprintDTO>> getSprinsBetweenDate(@RequestParam String from, @RequestParam String to)
-	{
+	{		
 		return new ResponseEntity<>(service.getSprintsBetweenDate(LocalDate.parse(from), LocalDate.parse(to)),HttpStatus.OK);
 	}
 

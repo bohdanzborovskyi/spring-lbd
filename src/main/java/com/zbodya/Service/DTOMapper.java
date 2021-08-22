@@ -15,12 +15,6 @@ import com.zbodya.Entities.DTO.UserstoryDTO;
 @Service
 public class DTOMapper 
 {
-
-	@Bean
-	public ModelMapper getMapper() 
-	{
-		return new ModelMapper();
-	}
 	
 	@Autowired
 	ModelMapper mapper;

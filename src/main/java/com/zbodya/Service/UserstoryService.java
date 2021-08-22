@@ -6,7 +6,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties.Pageable;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,7 @@ import com.zbodya.Entities.File;
 import com.zbodya.Entities.Sprint;
 import com.zbodya.Entities.Userstory;
 import com.zbodya.Entities.DTO.UserstoryDTO;
+import com.zbodya.Events.UserStoryCreatedEvent;
 import com.zbodya.Exceptions.TransactionException;
 import com.zbodya.Repositories.FileRepository;
 import com.zbodya.Repositories.SprintRepository;
@@ -36,24 +37,31 @@ public class UserstoryService
 	@Autowired 
 	DTOMapper mapper;
 	
+	@Autowired
+	private ApplicationEventPublisher publisher;
+	
 	@Transactional(rollbackOn = TransactionException.class)
 	public void saveUserstory(String description, int countStoryPoints, String status, List<File> files) throws TransactionException 
 	{
 		if(description!= null && countStoryPoints != 0)
 		{
+			Userstory us;
 			if(status == null)
 			{
 				status = "To do";
-				Userstory us = new Userstory(description, countStoryPoints, status, files);
+				us = new Userstory(description, countStoryPoints, status, files);
 				repo.save(us);			
 			}else 
 			{
-				Userstory us = new Userstory(description, countStoryPoints, status, files);
+				us = new Userstory(description, countStoryPoints, status, files);
 				repo.save(us);	
 			}
+			UserStoryCreatedEvent event = new UserStoryCreatedEvent(this,us);
+			publisher.publishEvent(event);
 		}
 		else
-			throw new TransactionException("Invalid Userstory data");
+			throw new TransactionException("Invalid Userstory data");		
+		
 	}
 	
 	public List<Userstory> getUserstoriesBySprintID(Long id)
@@ -76,7 +84,7 @@ public class UserstoryService
 		return mapper.convertUserstoryToUserstoryDTO(userStory);
 	}
 	
-	public int getCountOfStoryPointsInDoneUserstoriesBySprintID(Long id) 
+	public Integer getCountOfStoryPointsInDoneUserstoriesBySprintID(Long id) 
 	{
 		return repo.getStorypointsCountFromDoneUserstoriesBySprintID(id);
 	}

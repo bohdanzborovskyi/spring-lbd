@@ -18,7 +18,7 @@ public interface SprintRepository extends PagingAndSortingRepository<Sprint, Lon
 	@Query("Select s from Sprint s  where s.startdate<?1 and s.enddate>?2")
 	List<Sprint> findAllByDateBetween(LocalDate start, LocalDate end);
 	
-	
+	List<Sprint> findByStatusOrderByStartdateDesc(String status);
 	
 
 }
